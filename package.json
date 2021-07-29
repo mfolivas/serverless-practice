@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/mfolivas/serverless-practice/issues"
   },
-  "homepage": "https://github.com/mfolivas/serverless-practice#readme"
+  "homepage": "https://github.com/mfolivas/serverless-practice#readme",
+  "devDependencies": {
+    "aws-sdk": "^2.957.0"
+  },
+  "dependencies": {}
 }

@@ -7,24 +7,39 @@ provider:
   name: aws
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
+  versionFunctions: false
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+      Resource:
+        - Fn::GetAtt: [OrdersTable, Arn]
 
 custom:
-  tableName: orders-${self:provider.stage}
+  TABLE_NAME: orders-${self:provider.stage}
 
 functions:
-  hello:
-    handler: handler.hello
+  add-order:
+    handler: handler.addOrder
     events:
       - httpApi:
           method: POST
           path: /orders
-
+  
+  get-order:
+    handler: handler.getOrder
+    events:
+      - httpApi:
+          method: GET
+          path: /orders/{id}
 resources:
   Resources:
-    dynamodbTable:
+    OrdersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.TABLE_NAME}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -34,4 +49,4 @@ resources:
         BillingMode: PAY_PER_REQUEST
         Tags:
           - Key: microservice
-            Value: example
+            Value: orders
