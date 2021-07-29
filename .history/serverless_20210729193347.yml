@@ -1,0 +1,37 @@
+
+service: serverless-practice
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+custom:
+  tableName: orders-${self:provider.stage}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          method: POST
+          path: /orders
+
+resources:
+  Resource:
+    dynamodbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - Key: 
+        ProvisionedThroughput: 
+        
+        Tags:
+          - Key: microservice
+            Value: example
